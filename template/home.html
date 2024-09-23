@@ -1,0 +1,143 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Home page</title>
+    <script src="/assets/js/htmx/htmx.js"></script>
+    <link rel="stylesheet" href="./assets/style.css">
+    <style>
+        table {
+            width: 100%;
+            /* Stretch the table to full width */
+            border-collapse: collapse;
+            /* Improve cell borders */
+        }
+
+        th,
+        td {
+            padding: 5px;
+            /* Add padding for better readability */
+        }
+    </style>
+</head>
+
+<body class="p-1">
+
+    <!-- {{.info.Name}} -->
+    <!-- {{.info.KernalVersion}} -->
+
+    <section>
+        <!--    info section    -->
+        <div class="w-11/12 p-1">
+
+            {{template "header" .}}
+            {{template "update-time" .}}
+
+        </div>
+
+
+    </section>
+
+    {{template "table" .}}
+
+
+
+
+
+
+
+</body>
+
+{{define "table"}}
+
+<div hx-get="/body" hx-trigger="every 1s" hx-trigger="#table-data">
+
+    <table id="table-data">
+        <thead>
+            <tr>
+                <th>PID</th>
+                <th>User</th>
+                <th>VmSize</th>
+                <th>cpuPercent</th>
+                <th>ProcUpTime</th>
+                <th>Cmd</th>
+            </tr>
+        </thead>
+        <tbody>
+
+            {{range $index , $process := .info.Processes}}
+
+            <tr>
+                <td>{{ $process.PID }}</td>
+                <td>{{ $process.User }}</td>
+                <td>{{ $process.VmSize }}</td>
+                <!-- cpuPercent -->
+                <td>{{$process.CpuPercent}}</td>
+                <td>{{ $process.ProcUpTime }}</td>
+                <td title="{{ $process.Cmd }}">{{ $process.Scmd }}</td>
+            </tr>
+
+            {{end}}
+
+        </tbody>
+    </table>
+</div>
+{{end}}
+
+
+{{define "header"}}
+
+<div class="flex flex-row justify-between  pt-2">
+
+    <div>
+        <span>os:</span> <span>{{.info.Name}}</span>
+    </div>
+
+
+    <div>
+        <span>kernal version:</span> <span>{{.info.KernalVersion}}</span>
+    </div>
+
+</div>
+
+{{end}}
+
+{{define "update-time"}}
+
+<div hx-get="/time" hx-trigger="every 3s" hx-trigger="#time">
+    <div id="time">
+
+
+        <div class="flex flex-row justify-between  pt-2">
+
+            <div>
+                <span>uptime: {{.info.UpTime}}</span>
+            </div>
+
+            <div>
+                <span>Number of Cores:</span> <span>{{.info.NumberOfCores}}</span>
+            </div>
+
+        </div>
+
+        <div class="flex flex-row justify-between  pt-2">
+
+            <div>
+                <span>Processes:</span> <span>{{.info.NumberOfProcesses}}</span>
+            </div>
+
+            <div>
+                <span>Running Processes:</span> <span>{{.info.NumberOfRunningProcesses}}</span>
+            </div>
+
+        </div>
+
+    </div>
+
+</div>
+
+{{end}}
+
+</html>
