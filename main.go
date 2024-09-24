@@ -1,6 +1,7 @@
 package main
 
 import (
+	"github.com/gin-contrib/pprof"
 	"github.com/gin-gonic/gin"
 	progressparser "sys-monitor/progress_parser"
 	"sys-monitor/util"
@@ -9,10 +10,9 @@ import (
 func main() {
 
 	r := gin.Default()
+	pprof.Register(r)
 
 	r.GET("/", func(ctx *gin.Context) {
-
-		// TODO: get initial inforation like os name - kernal - system info
 
 		info := progressparser.Sysinfo
 
@@ -81,4 +81,5 @@ func main() {
 	r.LoadHTMLGlob("template/*")
 	r.Static("/assets", "./static")
 	r.Run(":8080")
+
 }

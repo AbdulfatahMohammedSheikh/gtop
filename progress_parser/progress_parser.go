@@ -50,9 +50,9 @@ func NewProcessInfo() *[]Process {
 		processes = append(processes, newProcess)
 	}
 
-    sort.Slice(processes , func(i, j int) bool {
-        return processes[i].CpuPercent> processes[j].CpuPercent
-    })
+	sort.Slice(processes, func(i, j int) bool {
+		return processes[i].CpuPercent > processes[j].CpuPercent
+	})
 
 	return &processes
 }
